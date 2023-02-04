@@ -57,7 +57,6 @@ if (isset($_POST['add-project'])) {
 $page_content = include_template('form-project.php', [
     'projects' => get_projects($con, 1), 
     'tasks' => $tasks, 
-    'show_complete_tasks' => $show_complete_tasks, 
     'id' => $id,
     'errors' => $errors
 ]);

@@ -60,7 +60,6 @@ if (isset($_POST['add-task'])) {
 $page_content = include_template('form-task.php', [
     'projects' => get_projects($con, 1), 
     'tasks' => $tasks, 
-    'show_complete_tasks' => $show_complete_tasks, 
     'id' => $id,
     'errors' => $errors
 ]);

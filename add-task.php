@@ -3,13 +3,14 @@ require_once('init.php');
 
 $tasks = [];
 $id = null;
+$error_message = "";
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $tasks = get_tasks_by_id($con, 1, $id);
+    $tasks = get_tasks_by_id($con, $_SESSION['user']['id'], $id);
 }
 else {
-    $tasks = get_tasks_by_user($con, 1);
+    $tasks = get_tasks_by_user($con, $_SESSION['user']['id']);
 }
 
 $errors = [];
@@ -21,6 +22,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     
+    if ($_POST['project'] != "" && check_hacker($con, $_SESSION['user']['id'], $_POST['project'])) {
+        $error_message = "Ай-ай-ай, хакером быть нынче плохо, но прибыльно!";
+    }
+
     if ($_POST['date'] != "") {
         if (!is_date_valid($_POST['date'])) {
             $errors['date'] = 'Неправильный формат';
@@ -29,18 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
         $_POST['date'] = NULL;
     }  
-
-    // Уязвимость что пользователь может в верстке поменять значение value в <option> и добавить чужому пользователю задачу
-    // if ($_POST['project'] != "") {
-    //     if (validate_project($_POST['project'])) {
-    //         $errors['project'] = 'Неправильный формат';
-    //     } 
-    // }
-    // else {
-    //     $_POST['date'] = NULL;
-    // } 
     
-    if (empty($errors)) {
+    if (empty($errors) && empty($error_message)) {
         // Добавление файла в папку  
         if (isset($_FILES['file'])) {
             $file_name = $_FILES['file']['name'];
@@ -68,10 +63,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $page_content = include_template('form-task.php', [
-    'projects' => get_projects($con, 1), 
+    'projects' => get_projects($con, $_SESSION['user']['id']), 
     'tasks' => $tasks, 
     'id' => $id,
-    'errors' => $errors
+    'errors' => $errors,
+    'error_message' => $error_message
 ]);
 $layout_content = include_template('layout.php', [
     'content' => $page_content, 

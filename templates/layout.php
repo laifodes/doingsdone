@@ -9,32 +9,45 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
+<?php $classname = !isset($user) ? "body-background" : ""; ?>
+
 <body>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
-    <div class="container container--with-sidebar">
-        <header class="main-header">
-            <a href="/">
-                <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
-            </a>
+    <?php $classname = isset($user) ? "container--with-sidebar" : ""; ?>
 
-            <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="/add-task.php<?php if (isset($_GET['id'])):?><?= '?id=' . $id ?><?php endif;?>">Добавить задачу</a>
+    <div class="container <?= $classname; ?>">
+        <?php if (!isset($_SESSION["user"])): ?>
+            <header class="main-header">
+                <a href="/">
+                    <img src="../img/logo.png" width="153" height="42" alt="Логитип Дела в порядке">
+                </a>
 
-                <div class="main-header__side-item user-menu">
-                    <div class="user-menu__data">
-                        <p>Константин</p>
+                <div class="main-header__side">
+                    <a class="main-header__side-item button button--transparent" href="/auth.php">Войти</a>
+                </div>
+            </header>
+        <?php else: ?>
+            <header class="main-header">
+                <a href="/index.php">
+                    <img src="/img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
+                </a>
+                <div class="main-header__side">
+                    <a class="main-header__side-item button button--plus open-modal" href="/add-task.php">Добавить задачу</a>
 
-                        <a href="#">Выйти</a>
+                    <div class="main-header__side-item user-menu">
+                        <img class="user-menu__photo" src="/img/user-pic.jpg" width="40" height="40" alt="Фото пользователя">
+                        <div class="user-menu__data">
+                            <p style="margin-left: 5px;"><?= strip_tags($_SESSION["user"]["nickname"]); ?></p>
+                            <a href="/logout.php" style="margin-left: 5px;">Выйти</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
+        <?php endif; ?>
 
-        <div class="content">
-            <?=$content?>
-        </div>
+        <div class="content"><?= $content; ?></div>
     </div>
 </div>
 

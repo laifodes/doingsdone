@@ -54,7 +54,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             else {
                 // Если запрос выполнен успешно, переадресовываем пользователя на главную страницу
-                header('Location: /index.php');
+                header('Location: /auth.php');
             }
         }
     }
@@ -65,6 +65,6 @@ $page_content = include_template('form-register.php', [
 ]);
 $layout_content = include_template('layout.php', [
     'content' => $page_content, 
-    'title' => 'Дела в порядке'
+    'title' => 'Дела в порядке | Регистрация'
 ]);
 print($layout_content);

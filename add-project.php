@@ -6,10 +6,10 @@ $id = null;
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $tasks = get_tasks_by_id($con, 1, $id);
+    $tasks = get_tasks_by_id($con, $_SESSION['user']['id'], $id);
 }
 else {
-    $tasks = get_tasks_by_user($con, 1);
+    $tasks = get_tasks_by_user($con, $_SESSION['user']['id']);
 }
 
 $errors = [];
@@ -21,13 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     if (empty($errors)) {
-        $user = 1;
 
         // SQL запрос на добавление нового проекта
         $sql = "INSERT INTO projects (user, name) VALUES (?, ?)";
 
         $stmt = mysqli_prepare($con, $sql);
-        mysqli_stmt_bind_param($stmt, 'is', $user, $_POST['name']);
+        mysqli_stmt_bind_param($stmt, 'is', $_SESSION['user']['id'], $_POST['name']);
         mysqli_stmt_execute($stmt);
         $res = mysqli_stmt_get_result($stmt);
 
@@ -36,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $page_content = include_template('form-project.php', [
-    'projects' => get_projects($con, 1), 
+    'projects' => get_projects($con, $_SESSION['user']['id']), 
     'tasks' => $tasks, 
     'id' => $id,
     'errors' => $errors

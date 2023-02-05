@@ -50,3 +50,21 @@ function get_tasks_by_id ($con, $user, $id) {
         return mysqli_fetch_all($res, MYSQLI_ASSOC);
     }
 }
+
+// Проверяем что проект привязан к пользователю и он не хочет пошалить) 
+function check_hacker ($con, $user, $project) {
+    $user = mysqli_real_escape_string($con, $user); // Экранирует специальные символы в строке
+    $project = mysqli_real_escape_string($con, $project); // Экранирует специальные символы в строке
+
+    $sql = "SELECT * FROM `projects` WHERE user = '$user' and id = '$project'";
+    $result = mysqli_query($con, $sql);
+
+    // Ай-ай-ай кто-то тут хакер!
+    if (mysqli_num_rows($result) == 0) {
+        return TRUE;
+    }
+    // Он молодец, не плохой
+    else {
+        return FALSE;
+    }
+}

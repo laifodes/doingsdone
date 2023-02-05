@@ -14,7 +14,7 @@
 <body>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
-<div class="page-wrapper">
+<div class="page-wrapper" style="background: url('img/background.jpg'); background-size: cover;">
     <?php $classname = isset($user) ? "container--with-sidebar" : ""; ?>
 
     <div class="container <?= $classname; ?>">

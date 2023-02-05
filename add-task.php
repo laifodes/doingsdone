@@ -13,7 +13,7 @@ else {
 }
 
 $errors = [];
-if (isset($_POST['add-task'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $required_fields = ['name', 'project'];   
     foreach ($required_fields as $field) {
         if (empty($_POST[$field])) {
@@ -29,6 +29,16 @@ if (isset($_POST['add-task'])) {
     else {
         $_POST['date'] = NULL;
     }  
+
+    // Уязвимость что пользователь может в верстке поменять значение value в <option> и добавить чужому пользователю задачу
+    // if ($_POST['project'] != "") {
+    //     if (validate_project($_POST['project'])) {
+    //         $errors['project'] = 'Неправильный формат';
+    //     } 
+    // }
+    // else {
+    //     $_POST['date'] = NULL;
+    // } 
     
     if (empty($errors)) {
         // Добавление файла в папку  

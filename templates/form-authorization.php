@@ -35,13 +35,17 @@
       <main class="content__main">
         <h2 class="content__main-heading">Вход на сайт</h2>
 
-        <form class="form" action="index.html" method="post" autocomplete="off">
+        <form class="form" action="/authorization.php" method="post" autocomplete="off">
           <div class="form__row">
+            <?php $classname = isset($errors["email"]) ? "form__input--error" : ""; ?>
             <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
-            <input class="form__input form__input--error" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
-
-            <p class="form__message">E-mail введён некорректно</p>
+            <input class="form__input form__input--error <?= $classname; ?>" type="text" name="email" id="email" value="<?= $_POST['email'] ?? "" ?>" placeholder="Введите e-mail">
+            <?php if (isset($errors['email'])) : ?>
+                <p class="form__message">
+                    <?= $errors['email'] ?? ""; ?>
+                </p>
+            <?php endif; ?>
           </div>
 
           <div class="form__row">

@@ -18,9 +18,10 @@ function get_projects ($con, $user) {
 
 // Функция для получения всех задач пользователя
 function get_tasks_by_user ($con, $user) {
-    $sql = "SELECT tasks.name AS task, tasks.date_of_completion, projects.name AS category, tasks.completed, link_file FROM projects
+    $sql = "SELECT tasks.name AS task, tasks.date_of_completion, projects.name AS category, tasks.completed, link_file, tasks.id FROM projects
             JOIN tasks ON tasks.category = projects.id
-            WHERE projects.user = ?";
+            WHERE projects.user = ?
+            ORDER BY tasks.id DESC";
 
 
     $stmt = mysqli_prepare($con, $sql);
@@ -33,10 +34,10 @@ function get_tasks_by_user ($con, $user) {
 
 // Функция для получения всех задач пользователя с отбором по проекту
 function get_tasks_by_id ($con, $user, $id) {
-    $sql = "SELECT tasks.name AS task, tasks.date_of_completion, projects.name AS category, tasks.completed, link_file FROM projects
-            JOIN tasks ON tasks.category = projects.id
-            WHERE projects.user = ? AND projects.id = ?";
-
+    $sql = "SELECT tasks.name AS task, tasks.date_of_completion, projects.name AS category, tasks.completed, link_file, tasks.id FROM projects
+    JOIN tasks ON tasks.category = projects.id
+    WHERE projects.user = ? AND projects.id = ?
+    ORDER BY tasks.id DESC";
 
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'ii', $user, $id);
